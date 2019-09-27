@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-color: #a2b9bc;
+    font-family: sans-serif;
+}
+
+#main {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100em;
+    height: 90ex;
+}
+
+h1 {
+    font-size: 300%;
+}
+
+table {
+    width: 20em;
+    height: 20em;
+    margin-top: 5em;
+    border-collapse: collapse; 
+    border-spacing: 0;
+}
+
+td {
+    padding-left: 1ex;
+    padding-right: 1ex;
+    border: 2px solid #ccc;
+    font-size: 2em;
+    font-weight: 400;
+}

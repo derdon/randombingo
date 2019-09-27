@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<title>{{ config.title }}</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='jquery.js') }}"></script>
+<script>
+$(document).ready(function() {
+    const rows = 5;
+    const bingoSize = 25;
+    $("form#generate").submit(function(event) {
+        // Stop form from submitting normally
+        event.preventDefault();
+        $.post("/getwords", {"count": bingoSize, "rows": rows}, function(tableData) {
+            console.log(tableData);
+            var s = "<table>";
+            for (let row of tableData) {
+                s += "<tr>";
+                for (let word of row) {
+                    s += "<td>" + word + "</td>";
+                }
+                s += "</tr>";
+            }
+            s += "</table>";
+            console.log(s);
+            // remove <table> if it exists
+            $("table").remove();
+            // create s after main div
+            $(s).appendTo("#main");
+        })
+    });
+});
+</script>
+<div id=main>
+  <h1>{{ config.title }}</h1>
+  <form action="" id=generate>
+      <input type=submit value="Neues Bingo generieren">
+  </form>
+</div>
