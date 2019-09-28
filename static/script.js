@@ -4,12 +4,7 @@ function table2html(tableData) {
     for (let row of tableData) {
         s += "<tr>";
         for (let value of row) {
-            //tdTag = value == "[BLANK]" ? "<td class=blank>" : "<td>";
-            if (value == "[BLANK]") {
-                tdTag = "<td class=blank>";
-            } else {
-                tdTag = "<td>";
-            }
+            tdTag = value == "[BLANK]" ? "<td class=blank>" : "<td>";
             s += tdTag + value + "</td>";
         }
         s += "</tr>";
