@@ -5,35 +5,8 @@
 <link rel="stylesheet" href="/resources/demos/style.css">  <!-- TODO: update?! -->
 <script src="{{ url_for('static', filename='jquery.js') }}"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-function table2html(tableData) {
-    var s = "<table>";
-    for (let row of tableData) {
-        s += "<tr>";
-        for (let value of row) {
-            s += "<td>" + value + "</td>";
-        }
-        s += "</tr>";
-    }
-    s += "</table>";
-    return s;
-}
-
-function getCurrentTableData() {
-    var data = [];
-    $("td").each(function(index) {
-        data.push($(this).text());
-    })
-    return data;
-}
-
-function refreshTable(newTable) {
-    // remove <table> if it exists
-    $("table").remove();
-    // create new table after main div
-    $(table2html(newTable)).appendTo("#main");
-}
-
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script type="text/javascript">
 $(document).ready(function() {
     const cols = 5;
     const bingoSize = 25;
