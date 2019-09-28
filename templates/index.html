@@ -19,6 +19,14 @@ function table2html(tableData) {
     return s;
 }
 
+function getCurrentTableData() {
+    var data = [];
+    $("td").each(function(index) {
+        data.push($(this).text());
+    })
+    return data;
+}
+
 function refreshTable(newTable) {
     // remove <table> if it exists
     $("table").remove();
@@ -62,6 +70,10 @@ $(document).ready(function() {
     $("#add").button().on("click", function() {
         dialog.dialog("open");
     });
+
+    $("#shuffle").button().on("click", function() {
+        $.post("/custom", {"values": getCurrentTableData(), "num_cols": cols}, refreshTable);
+    });
 });
 </script>
 <div id="dialog-form" title="Erstelle ein neues Bingofeld">
@@ -78,6 +90,6 @@ $(document).ready(function() {
 <div id=main>
   <h1>{{ config.title }}</h1>
   <button id=add>Bingowerte eintragen</button>
-  <!-- TODO: add a button to shuffle the existing values -->
+  <button id=shuffle>Eingetragene Werte durchmischen</button>
   <!-- TODO: allow dropping text files onto #main -->
 </div>
