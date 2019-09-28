@@ -1,14 +1,28 @@
-import random
+import os
+import os.path
 
 from flask import Flask, request, render_template, jsonify
+from werkzeug.utils import secure_filename
 
-from logic import grouper
+from logic import bingo_from_iterable
+
+UPLOAD_FOLDER = os.path.abspath('uploads')
+ALLOWED_EXTENSIONS = {'.txt', '.csv'}
+
 
 app = Flask(__name__)
 app.config.update(
     title='Random Bingo Generator',
     cols=5,
+    # limit upload size to 16 Megabyte
+    MAX_CONTENT_LENGTH=16 * 1024 * 1024,
+    UPLOAD_FOLDER=UPLOAD_FOLDER,
 )
+
+
+def allowed_file(filename):
+    _, ext = os.path.splitext(filename)
+    return '.' in filename and ext.lower() in ALLOWED_EXTENSIONS
 
 
 @app.route('/')
@@ -19,8 +33,21 @@ def index():
 @app.route('/custom', methods=['POST'])
 def custom_bingo():
     values = request.form.getlist('values[]')
-    filtered_values = list(filter(
-        lambda value: value is not None and value.strip(), values))
-    random.shuffle(filtered_values)
-    num_cols = int(request.form['num_cols'])
-    return jsonify(list(grouper(filtered_values, num_cols, '[BLANK]')))
+    return jsonify(list(bingo_from_iterable(values, app.config['cols'])))
+
+
+@app.route('/file-upload', methods=['POST'])
+def bingo_by_uploaded_file():
+    file = request.files['file']
+    if file.filename == '':
+        return ''
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        abs_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(abs_path)
+        with open(abs_path) as fp:
+            values = bingo_from_iterable(fp, app.config['cols'])
+        # remove the file from upload directory again, don't store it
+        os.remove(abs_path)
+        return jsonify(list(values))
+    return jsonify([])

@@ -6,6 +6,7 @@
 <script src="{{ url_for('static', filename='jquery.js') }}"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="{{ url_for('static', filename='dropzone.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
     const cols = {{ config.cols }};
@@ -46,6 +47,12 @@ $(document).ready(function() {
     $("#shuffle").button().on("click", function() {
         $.post("/custom", {"values": getCurrentTableData(), "num_cols": cols}, refreshTable);
     });
+
+    // allow dropping text files onto the web page
+    var myDropzone = new Dropzone("body", { url: "/file-upload" });
+    myDropzone.on("success", function(file, response) {
+        refreshTable(response);
+    });
 });
 </script>
 <div id="dialog-form" title="Erstelle ein neues Bingofeld">
@@ -63,5 +70,4 @@ $(document).ready(function() {
   <h1>{{ config.title }}</h1>
   <button id=add>Bingowerte eintragen</button>
   <button id=shuffle>Eingetragene Werte durchmischen</button>
-  <!-- TODO: allow dropping text files onto #main -->
 </div>
