@@ -2,7 +2,6 @@ import random
 from collections import namedtuple
 from itertools import zip_longest
 
-SIZE = 5
 DICT_FILENAME = 'words-de.txt'
 
 

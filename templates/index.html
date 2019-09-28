@@ -1,37 +1,83 @@
 <!DOCTYPE html>
 <title>{{ config.title }}</title>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">  <!-- TODO: update?! -->
 <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+function table2html(tableData) {
+    var s = "<table>";
+    for (let row of tableData) {
+        s += "<tr>";
+        for (let value of row) {
+            s += "<td>" + value + "</td>";
+        }
+        s += "</tr>";
+    }
+    s += "</table>";
+    return s;
+}
+
+function refreshTable(newTable) {
+    // remove <table> if it exists
+    $("table").remove();
+    // create new table after main div
+    $(table2html(newTable)).appendTo("#main");
+}
+
 $(document).ready(function() {
-    const rows = 5;
+    const cols = 5;
     const bingoSize = 25;
-    $("form#generate").submit(function(event) {
-        // Stop form from submitting normally
-        event.preventDefault();
-        $.post("/getwords", {"count": bingoSize, "rows": rows}, function(tableData) {
-            console.log(tableData);
-            var s = "<table>";
-            for (let row of tableData) {
-                s += "<tr>";
-                for (let word of row) {
-                    s += "<td>" + word + "</td>";
-                }
-                s += "</tr>";
+
+    function generateBingo() {
+        var values = $("#bingovalues").val().split("\n");
+        $.post("/custom", {"values": values, "num_cols": cols}, refreshTable);
+        $(this).dialog("close");
+    }
+
+    var form;
+
+    var dialog = $("#dialog-form").dialog({
+        autoOpen: false,
+        height: 400,
+        width: 800,
+        modal: true,
+        buttons: {
+            "Bingofeld generieren": generateBingo,
+            "Schließen": function() {
+                $(this).dialog("close");
             }
-            s += "</table>";
-            console.log(s);
-            // remove <table> if it exists
-            $("table").remove();
-            // create s after main div
-            $(s).appendTo("#main");
-        })
+        },
+        close: function() {
+            form[0].reset();
+        }
+    });
+
+    form = dialog.find("form").on("submit", function(event) {
+        event.preventDefault();
+        generateBingo();
+    });
+
+    $("#add").button().on("click", function() {
+        dialog.dialog("open");
     });
 });
 </script>
+<div id="dialog-form" title="Erstelle ein neues Bingofeld">
+  <form>
+    <fieldset>
+      <label for="bingovalues">Werte für die Bingofelder (jede Zeile entspricht einem Eintrag)</label>
+      <textarea rows=25 cols=80 name=bingovalues id=bingovalues class="text ui-widget-content ui-corner-all"></textarea>
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+  </form>
+</div>
+
 <div id=main>
   <h1>{{ config.title }}</h1>
-  <form action="" id=generate>
-      <input type=submit value="Neues Bingo generieren">
-  </form>
+  <button id=add>Bingowerte eintragen</button>
+  <!-- TODO: add a button to shuffle the existing values -->
+  <!-- TODO: allow dropping text files onto #main -->
 </div>
