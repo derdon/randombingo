@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 from logic import bingo_from_iterable
 
-UPLOAD_FOLDER = os.path.abspath('uploads')
+UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'.txt', '.csv'}
 
 
