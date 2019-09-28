@@ -7,12 +7,13 @@ from logic import grouper
 app = Flask(__name__)
 app.config.update(
     title='Random Bingo Generator',
+    cols=5,
 )
 
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', config=app.config)
 
 
 @app.route('/custom', methods=['POST'])

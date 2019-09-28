@@ -8,8 +8,7 @@
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    const cols = 5;
-    const bingoSize = 25;
+    const cols = {{ config.cols }};
 
     function generateBingo() {
         var values = $("#bingovalues").val().split("\n");
@@ -53,7 +52,7 @@ $(document).ready(function() {
   <form>
     <fieldset>
       <label for="bingovalues">Werte für die Bingofelder (jede Zeile entspricht einem Eintrag)</label>
-      <textarea rows=25 cols=80 name=bingovalues id=bingovalues class="text ui-widget-content ui-corner-all"></textarea>
+      <textarea rows=10 cols=80 name=bingovalues id=bingovalues class="text ui-widget-content ui-corner-all"></textarea>
       <!-- Allow form submission with keyboard without duplicating the dialog button -->
       <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
     </fieldset>
