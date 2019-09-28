@@ -13,8 +13,7 @@ body {
     right: 0;
     bottom: 0;
     left: 0;
-    width: 900px;
-    height: 90ex;
+    width: 1500px;
 }
 
 h1 {
@@ -22,8 +21,8 @@ h1 {
 }
 
 table {
-    height: 20em;
-    margin-top: 5em;
+    min-height: 20em;
+    margin-top: 3em;
     border-collapse: collapse; 
     border-spacing: 0;
 }
@@ -40,6 +39,12 @@ td {
 
 td.blank {
     font-size: 0;
+}
+
+.scrolling-wrapper-flexbox {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
 /*******************************************************/

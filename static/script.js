@@ -1,5 +1,5 @@
 function table2html(tableData) {
-    var s = "<table>";
+    var s = "<table class=scrolling-wrapper-flexbox>";
     var tdTag;
     for (let row of tableData) {
         s += "<tr>";
