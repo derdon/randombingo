@@ -28,7 +28,6 @@ def custom_bingo():
     filtered_values = list(filter(
         lambda value: value is not None and value.strip(), values))
     # TODO: add values from values until the desired size is reached (i.e. 25)
-    print(repr(filtered_values))
     random.shuffle(filtered_values)
     num_cols = int(request.form['num_cols'])
     return jsonify(list(grouper(filtered_values, num_cols)))
