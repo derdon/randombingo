@@ -2,7 +2,7 @@ import random
 
 from flask import Flask, request, render_template, jsonify
 
-from logic import generate_words, grouper
+from logic import grouper
 
 app = Flask(__name__)
 app.config.update(
@@ -13,13 +13,6 @@ app.config.update(
 @app.route('/')
 def index():
     return render_template('index.html')
-
-
-@app.route('/getwords', methods=['POST'])
-def get_words():
-    count = int(request.form['count'])
-    n = int(request.form['num_cols'])
-    return jsonify(list(grouper(generate_words(count), n)))
 
 
 @app.route('/custom', methods=['POST'])
