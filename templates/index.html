@@ -9,11 +9,9 @@
 <script src="{{ url_for('static', filename='dropzone.js') }}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    const cols = {{ config.cols }};
-
     function generateBingo() {
         var values = $("#bingovalues").val().split("\n");
-        $.post("/custom", {"values": values, "num_cols": cols}, refreshTable);
+        $.post("/custom", {"values": values}, refreshTable);
         $(this).dialog("close");
     }
 
@@ -45,7 +43,7 @@ $(document).ready(function() {
     });
 
     $("#shuffle").button().on("click", function() {
-        $.post("/custom", {"values": getCurrentTableData(), "num_cols": cols}, refreshTable);
+        $.post("/custom", {"values": getCurrentTableData()}, refreshTable);
     });
 
     // allow dropping text files onto the web page

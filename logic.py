@@ -1,3 +1,4 @@
+import math
 import random
 from itertools import zip_longest
 
@@ -10,8 +11,10 @@ def grouper(iterable, n, fillvalue=None):
     return zip_longest(*args, fillvalue=fillvalue)
 
 
-def bingo_from_iterable(values, num_cols):
+def bingo_from_iterable(values, num_cols=None):
     filtered_values = list(filter(
         lambda value: value is not None and value.strip(), values))
     random.shuffle(filtered_values)
+    if num_cols is None:
+        num_cols = int(math.sqrt(len(filtered_values)))
     return grouper(filtered_values, num_cols, '[BLANK]')

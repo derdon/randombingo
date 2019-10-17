@@ -13,7 +13,6 @@ ALLOWED_EXTENSIONS = {'.txt', '.csv'}
 app = Flask(__name__)
 app.config.update(
     title='Random Bingo Generator',
-    cols=5,
     # limit upload size to 16 Megabyte
     MAX_CONTENT_LENGTH=16 * 1024 * 1024,
     UPLOAD_FOLDER=UPLOAD_FOLDER,
@@ -33,7 +32,7 @@ def index():
 @app.route('/custom', methods=['POST'])
 def custom_bingo():
     values = request.form.getlist('values[]')
-    return jsonify(list(bingo_from_iterable(values, app.config['cols'])))
+    return jsonify(list(bingo_from_iterable(values)))
 
 
 @app.route('/file-upload', methods=['POST'])
@@ -46,7 +45,7 @@ def bingo_by_uploaded_file():
         abs_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(abs_path)
         with open(abs_path) as fp:
-            values = bingo_from_iterable(fp, app.config['cols'])
+            values = bingo_from_iterable(fp)
         # remove the file from upload directory again, don't store it
         os.remove(abs_path)
         return jsonify(list(values))
